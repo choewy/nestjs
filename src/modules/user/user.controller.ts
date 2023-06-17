@@ -1,14 +1,19 @@
 import { Controller, Post } from '@nestjs/common';
-import { UserService } from './user.service';
 
-@Controller('users')
+import { ControllerRouter } from '@/core';
+
+import { UserSQSProducerSubject } from './enums';
+import { UserSQSProducer } from './user.sqs-producer';
+
+@Controller(ControllerRouter.USER)
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(private readonly userSQSProducer: UserSQSProducer) {}
 
-  @Post('sqs/system')
+  @Post()
   async sendToSystem() {
-    return this.userService.sendToSystem('hello-system', {
+    return this.userSQSProducer.system.send(UserSQSProducerSubject.HELLO, {
       username: 'choewy',
+      message: 'hello, system.',
       createdAt: new Date(),
     });
   }
