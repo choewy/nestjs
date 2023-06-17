@@ -17,26 +17,22 @@ describe('AwsConfigFactory', () => {
   });
 
   describe('Return Value Case', () => {
-    const AWS_REGION = 'region';
-    const AWS_ACCESS_KEY_ID = 'accessKeyId';
-    const AWS_SECRET_ACCESS_KEY = 'secretAccessKey';
-
-    beforeAll(() => {
-      process.env.AWS_REGION = AWS_REGION;
-      process.env.AWS_ACCESS_KEY_ID = AWS_ACCESS_KEY_ID;
-      process.env.AWS_SECRET_ACCESS_KEY = AWS_SECRET_ACCESS_KEY;
-    });
-
     it('환경변수에 AWS_REGION가 있으면 값을 반환한다.', () => {
-      expect(new AwsConfigFactory().region).toEqual(AWS_REGION);
+      process.env.AWS_REGION = 'region';
+
+      expect(new AwsConfigFactory().region).toEqual('region');
     });
 
     it('환경변수에 AWS_ACCESS_KEY_ID가 있으면 값을 반환한다.', () => {
-      expect(new AwsConfigFactory().accessKeyId).toEqual(AWS_ACCESS_KEY_ID);
+      process.env.AWS_REGION = 'accessKeyId';
+
+      expect(new AwsConfigFactory().accessKeyId).toEqual('accessKeyId');
     });
 
     it('환경변수에 AWS_SECRET_ACCESS_KEY가 있으면 값을 반환한다.', () => {
-      expect(new AwsConfigFactory().secretAccessKey).toEqual(AWS_SECRET_ACCESS_KEY);
+      process.env.AWS_SECRET_ACCESS_KEY = 'secretAccessKey';
+
+      expect(new AwsConfigFactory().secretAccessKey).toEqual('secretAccessKey');
     });
   });
 });
