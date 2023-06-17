@@ -7,11 +7,11 @@ import {
   InvalidAwsSQSUserQueueNameError,
 } from './aws-sqs.config.error';
 
-export class AwsSQSconfigFactory {
+export class AwsSQSConfigFactory {
   constructor(private readonly processEnv: NodeJS.ProcessEnv = process.env) {}
 
   public static of() {
-    return registerAs(ConfigToken.AWS_SQS, () => new AwsSQSconfigFactory());
+    return registerAs(ConfigToken.AWS_SQS, () => new AwsSQSConfigFactory());
   }
 
   get endPoint(): string {

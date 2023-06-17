@@ -4,7 +4,7 @@ import { ConfigModule } from './config.module';
 import { ConfigToken } from './enums';
 import { ServerConfigFactory } from './server-config';
 import { AwsConfigFactory } from './aws-config';
-import { AwsSQSconfigFactory } from './aws-sqs-config';
+import { AwsSQSConfigFactory } from './aws-sqs-config';
 
 describe('ConfigModule', () => {
   let configModule: ConfigModule;
@@ -36,6 +36,6 @@ describe('ConfigModule', () => {
   });
 
   it('AwsSQSConfigFactory를 불러올 수 있어야 한다.', () => {
-    expect(configService.get(ConfigToken.AWS_SQS)).toBeInstanceOf(AwsSQSconfigFactory);
+    expect(configService.get(ConfigToken.AWS_SQS)).toBeInstanceOf(AwsSQSConfigFactory);
   });
 });
