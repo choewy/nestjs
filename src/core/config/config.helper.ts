@@ -1,6 +1,6 @@
 import { NodeEnv } from './enums';
 
-export class AppConfigHelper {
+export class ConfigHelper {
   public static get nodeEnv(): NodeEnv {
     return process.env.NODE_ENV as NodeEnv;
   }
