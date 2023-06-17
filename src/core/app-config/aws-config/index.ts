@@ -1,1 +1,1 @@
-export * from './aws.config.factory';
+export * from './aws-config.factory';

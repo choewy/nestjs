@@ -3,7 +3,7 @@ import { isEmpty } from 'class-validator';
 
 import { ConfigToken } from '../enums';
 
-import { InvalidAwsAccessKeyIdError, InvalidAwsRegionError, InvalidAwsSecretAccessKeyError } from './aws.config.error';
+import { InvalidAwsAccessKeyIdError, InvalidAwsRegionError, InvalidAwsSecretAccessKeyError } from './aws-config.error';
 
 export class AwsConfigFactory {
   public static of() {

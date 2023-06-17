@@ -1,5 +1,5 @@
-import { InvalidAwsAccessKeyIdError, InvalidAwsRegionError, InvalidAwsSecretAccessKeyError } from './aws.config.error';
-import { AwsConfigFactory } from './aws.config.factory';
+import { InvalidAwsAccessKeyIdError, InvalidAwsRegionError, InvalidAwsSecretAccessKeyError } from './aws-config.error';
+import { AwsConfigFactory } from './aws-config.factory';
 
 describe('AwsConfigFactory', () => {
   describe('Throw Error Case', () => {
