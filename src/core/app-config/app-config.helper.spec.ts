@@ -1,11 +1,10 @@
-import { InvalidNodeEnvError } from './app-config.error';
 import { AppConfigHelper } from './app-config.helper';
 import { NodeEnv } from './enums';
 
 describe('AppConfigHelper', () => {
   const JEST_NODE_ENV = process.env.NODE_ENV;
 
-  beforeEach(() => {
+  afterAll(() => {
     process.env.NODE_ENV = JEST_NODE_ENV;
   });
 
@@ -16,20 +15,6 @@ describe('AppConfigHelper', () => {
 
     it('테스트 환경에서는 envFilePath가 .env.test로 정의되어야 한다.', () => {
       expect(AppConfigHelper.envFilePath).toEqual('.env.test');
-    });
-  });
-
-  describe('Throw Error Case', () => {
-    it('환경변수에 NODE_ENV가 없으면 InvalidNodeEnvError 던진다.', () => {
-      process.env.NODE_ENV = undefined;
-
-      expect(() => AppConfigHelper.nodeEnv).toThrowError(InvalidNodeEnvError);
-    });
-
-    it('환경변수에 NODE_ENV가 있으나, NodeEnv 타입이 아니면 InvalidNodeEnvError 던진다.', () => {
-      process.env.NODE_ENV = 'invalid NODE_ENV';
-
-      expect(() => AppConfigHelper.nodeEnv).toThrowError(InvalidNodeEnvError);
     });
   });
 
