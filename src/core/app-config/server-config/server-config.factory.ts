@@ -6,12 +6,14 @@ import { ConfigToken } from '../enums';
 import { InvalidServerHostError, InvalidServerPortError } from './server-config.error';
 
 export class ServerConfigFactory {
+  constructor(private readonly processEnv: NodeJS.ProcessEnv = process.env) {}
+
   public static of() {
     return registerAs(ConfigToken.SERVER, () => new ServerConfigFactory());
   }
 
   get host(): string {
-    const val = process.env.SERVER_HOST;
+    const val = this.processEnv.SERVER_HOST;
 
     if (isEmpty(val)) {
       throw new InvalidServerHostError();
@@ -21,7 +23,7 @@ export class ServerConfigFactory {
   }
 
   get port(): number {
-    const val = Number(process.env.SERVER_PORT);
+    const val = Number(this.processEnv.SERVER_PORT);
 
     if (isEmpty(val) || !isInt(val)) {
       throw new InvalidServerPortError();
