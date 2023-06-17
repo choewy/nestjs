@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  localstack:
+    # image: localstack/localstack
+    build: .
+    container_name: localstack
+    environment:
+      SERVICES: sqs
+      DATA_DIR: /tmp/localstack/data
+      DEFAULT_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: aws-access-key-id
+      AWS_SECRET_ACCESS_KEY: aws-secret-access-key
+      DEBUG: 1
+    ports:
+      - 45661:4566
+    volumes:
+      - ./.volume:/var/lib/localstack
+      - ./.data:/tmp/localstack/data
