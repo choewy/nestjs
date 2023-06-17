@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { SystemController } from './system.controller';
-import { SystemService } from './system.service';
-import { SystemListener } from './system.listener';
+import { SystemSQSConsumer } from './system.sqs-consumer';
+import { SystemSQSProducer } from './system.sqs-producer';
 
 @Module({
   controllers: [SystemController],
-  providers: [SystemListener, SystemService],
+  providers: [SystemSQSConsumer, SystemSQSProducer],
 })
 export class SystemModule {}
