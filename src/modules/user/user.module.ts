@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 
 import { UserController } from './user.controller';
-import { UserService } from './user.service';
-import { UserListener } from './user.listener';
+import { UserSQSConsumer } from './user.sqs-consumer';
+import { UserSQSProducer } from './user.sqs-producer';
 
 @Module({
   controllers: [UserController],
-  providers: [UserListener, UserService],
+  providers: [UserSQSConsumer, UserSQSProducer],
 })
 export class UserModule {}
