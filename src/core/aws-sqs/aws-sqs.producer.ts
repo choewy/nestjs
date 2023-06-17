@@ -1,9 +1,9 @@
 import { v4 } from 'uuid';
 import { SQS } from '@aws-sdk/client-sqs';
+import { Logger } from '@nestjs/common';
 
 import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
 import { AwsConfigFactory } from '../config';
-import { Logger } from '@nestjs/common';
 
 export class AwsSQSProducer {
   public static of(awsConfigFactory: AwsConfigFactory, endPoint: string, queueName: string) {
@@ -32,7 +32,7 @@ export class AwsSQSProducer {
     return [this.endPoint, this.queueName].join('/');
   }
 
-  async sendMessage(messageBody: AwsSQSMessageBody): Promise<void> {
+  async send(subject: string, data: object): Promise<void> {
     try {
       const id = v4();
 
@@ -40,10 +40,10 @@ export class AwsSQSProducer {
         QueueUrl: this.queueUrl,
         MessageGroupId: id,
         MessageDeduplicationId: id,
-        MessageBody: JSON.stringify(messageBody),
+        MessageBody: JSON.stringify(AwsSQSMessageBody.to(subject, data)),
       });
 
-      this.logger.debug(JSON.stringify({ messageId: response.MessageId, messageBody }, null, 2), this.contextName);
+      this.logger.debug(JSON.stringify({ messageId: response.MessageId }, null, 2), this.contextName);
     } catch (e) {
       this.logger.error(JSON.stringify({ error: e }, null, 2), e.stack, this.contextName);
     }
