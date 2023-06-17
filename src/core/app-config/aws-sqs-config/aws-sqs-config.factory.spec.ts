@@ -25,5 +25,17 @@ describe('AwsSQSConfigFactory', () => {
     it('환경변수에 AWS_SQS_END_POINT가 있으면 값을 반환한다.', () => {
       expect(new AwsSQSconfigFactory({ AWS_SQS_END_POINT: 'end-point' }).endPoint).toEqual('end-point');
     });
+
+    it('환경변수에 AWS_SQS_USER_QUEUE_NAME이 있으면 값을 반환한다.', () => {
+      expect(new AwsSQSconfigFactory({ AWS_SQS_USER_QUEUE_NAME: 'user-queue.fifo' }).userQueueName).toEqual(
+        'user-queue.fifo',
+      );
+    });
+
+    it('환경변수에 AWS_SQS_SYSTEM_QUEUE_NAME이 있으면 값을 반환한다.', () => {
+      expect(new AwsSQSconfigFactory({ AWS_SQS_SYSTEM_QUEUE_NAME: 'system-queue.fifo' }).systemQueueName).toEqual(
+        'system-queue.fifo',
+      );
+    });
   });
 });
