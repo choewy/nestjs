@@ -1,24 +1,13 @@
 import { registerAs } from '@nestjs/config';
-import { isEmpty, isEnum, isInt } from 'class-validator';
+import { isEmpty, isInt } from 'class-validator';
 
 import { ConfigToken } from '../enums';
 
-import { InvalidServerHostError, InvalidNodeEnvError, InvalidServerPortError } from './server-config.error';
-import { NodeEnv } from './enums';
+import { InvalidServerHostError, InvalidServerPortError } from './server-config.error';
 
 export class ServerConfigFactory {
   public static of() {
     return registerAs(ConfigToken.SERVER, () => new ServerConfigFactory());
-  }
-
-  get env(): NodeEnv {
-    const val = process.env.NODE_ENV;
-
-    if (isEmpty(val) || !isEnum(val, NodeEnv)) {
-      throw new InvalidNodeEnvError();
-    }
-
-    return val as NodeEnv;
   }
 
   get host(): string {
