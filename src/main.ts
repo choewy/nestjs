@@ -1,8 +1,9 @@
 import { NestFactory } from '@nestjs/core';
-import { RootModule } from './root.module';
 import { ConfigService } from '@nestjs/config';
-import { ConfigToken, ServerConfigFactory } from './core';
 import { Logger } from '@nestjs/common';
+
+import { ConfigToken, ServerConfigFactory } from '@/core';
+import { RootModule } from '@/root.module';
 
 async function bootstrap() {
   const logger = new Logger();
