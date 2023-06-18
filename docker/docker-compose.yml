@@ -1,0 +1,31 @@
+version: '3.7'
+
+services:
+  localstack:
+    build: ./localstack
+    container_name: nestjs-aws-sqs-localstack
+    environment:
+      - SERVICES=sqs
+      - DATA_DIR=/tmp/localstack/data
+      - AWS_DEFAULT_REGION=ap-southeast-2
+      - AWS_ACCESS_KEY_ID=test
+      - AWS_SECRET_ACCESS_KEY=test
+      - DEBUG=1
+    ports:
+      - 45661:4566
+    volumes:
+      - ./localstack/.data:/tmp/localstack/data
+
+  mysql:
+    build: ./mysql
+    container_name: nestjs-aws-sqs-mysql
+    ports:
+      - 33361:3306
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    volumes:
+      - ./mysql/.data:/var/lib/mysql
+      - ./mysql/.dump:/disk
