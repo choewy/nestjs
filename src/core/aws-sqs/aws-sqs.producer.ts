@@ -1,24 +1,25 @@
 import { v4 } from 'uuid';
 import { SQS } from '@aws-sdk/client-sqs';
 
-import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
+import { AwsConfigFactory, AwsSQSConfig } from '../config';
+
 import { AwsSQSConstructor } from './aws-sqs.constructor';
-import { AwsConfigFactory } from '../config';
+import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
 
 export class AwsSQSProducer extends AwsSQSConstructor {
-  public static of(awsConfigFactory: AwsConfigFactory, endPoint: string, queueName: string) {
+  public static of(awsConfigFactory: AwsConfigFactory, awsSQSConfig: AwsSQSConfig) {
     const region = awsConfigFactory.region;
     const credentials = AwsSQSCredentials.of(awsConfigFactory);
 
-    return new AwsSQSProducer(region, credentials, endPoint, queueName);
+    return new AwsSQSProducer(region, credentials, awsSQSConfig);
   }
 
   private readonly producer: SQS;
 
-  constructor(region: string, credentials: AwsSQSCredentials, endpoint: string, queueName: string) {
-    super(AwsSQSProducer.name, endpoint, queueName);
+  constructor(region: string, credentials: AwsSQSCredentials, awsSQSConfig: AwsSQSConfig) {
+    super(AwsSQSProducer.name, awsSQSConfig);
 
-    this.producer = new SQS({ region, credentials, endpoint: endpoint });
+    this.producer = this.createProducer(region, credentials);
   }
 
   async send(subject: string, data: object): Promise<void> {

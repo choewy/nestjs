@@ -1,22 +1,18 @@
 import { Consumer } from 'sqs-consumer';
-import { Message, SQS } from '@aws-sdk/client-sqs';
+import { Message } from '@aws-sdk/client-sqs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
-import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
+import { AwsConfigFactory, AwsSQSConfig } from '../config';
+
 import { AwsSQSConstructor } from './aws-sqs.constructor';
-import { AwsConfigFactory } from '../config';
+import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
 
 export class AwsSQSConsumer extends AwsSQSConstructor {
-  public static of(
-    awsConfigFactory: AwsConfigFactory,
-    endPoint: string,
-    queueName: string,
-    eventEmitter: EventEmitter2,
-  ) {
+  public static of(awsConfigFactory: AwsConfigFactory, awsSQSConfig: AwsSQSConfig, eventEmitter: EventEmitter2) {
     const region = awsConfigFactory.region;
     const credentials = AwsSQSCredentials.of(awsConfigFactory);
 
-    return new AwsSQSConsumer(region, credentials, endPoint, queueName, eventEmitter);
+    return new AwsSQSConsumer(region, credentials, awsSQSConfig, eventEmitter);
   }
 
   private readonly consumer: Consumer;
@@ -24,22 +20,12 @@ export class AwsSQSConsumer extends AwsSQSConstructor {
   constructor(
     region: string,
     credentials: AwsSQSCredentials,
-    endpoint: string,
-    queueName: string,
+    awsSQSConfig: AwsSQSConfig,
     private readonly eventEmitter: EventEmitter2,
   ) {
-    super(AwsSQSConsumer.name, endpoint, queueName);
+    super(AwsSQSConsumer.name, awsSQSConfig);
 
-    this.consumer = Consumer.create({
-      region,
-      queueUrl: this.queueUrl,
-      sqs: new SQS({ region, credentials, endpoint }),
-      handleMessage: this.handleMessage.bind(this),
-      waitTimeSeconds: 0,
-    });
-
-    this.consumer.on('error', this.logger.error);
-    this.consumer.on('processing_error', this.logger.error);
+    this.consumer = super.createConsumer(region, credentials, this.handleMessage.bind(this));
     this.consumer.start();
   }
 
