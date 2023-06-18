@@ -38,6 +38,6 @@ lerna-debug.log*
 
 # AWS Docker
 
-aws-docker/.data
-aws-docker/.volume
-
+docker/**/.data
+docker/**/.volume
+docker/**/.dump
