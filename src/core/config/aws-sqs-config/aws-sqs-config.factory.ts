@@ -9,8 +9,8 @@ export class AwsSQSConfigFactory implements Record<AwsSQSConfigFactoryProperty, 
     return registerAs(ConfigToken.AWS_SQS, () => new AwsSQSConfigFactory());
   }
 
-  public readonly systemQueue: AwsSQSConfig;
-  public readonly userQueue: AwsSQSConfig;
+  readonly systemQueue: AwsSQSConfig;
+  readonly userQueue: AwsSQSConfig;
 
   constructor(private readonly processEnv: NodeJS.ProcessEnv = process.env) {
     this.systemQueue = AwsSQSConfig.of(this.processEnv.AWS_SQS_END_POINT, this.processEnv.AWS_SQS_SYSTEM_QUEUE_NAME);
