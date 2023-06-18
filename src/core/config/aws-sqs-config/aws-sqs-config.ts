@@ -6,20 +6,27 @@ export class AwsSQSConfig {
     return new AwsSQSConfig(endpoint, queueName);
   }
 
-  constructor(public readonly endpoint: string, public readonly queueName: string) {
-    this.validateEndPoint();
-    this.validateQueueName();
+  readonly endpoint: string;
+  readonly queueName: string;
+
+  constructor(endpoint: string, queueName: string) {
+    this.endpoint = this.getEndpoint(endpoint);
+    this.queueName = this.getQueueName(queueName);
   }
 
-  protected validateEndPoint(): void {
-    if (isEmpty(this.endpoint)) {
+  protected getEndpoint(endpoint: string): string {
+    if (isEmpty(endpoint)) {
       throw new InvalidAwsSQSEndPointError();
     }
+
+    return endpoint;
   }
 
-  protected validateQueueName(): void {
-    if (isEmpty(this.queueName)) {
+  protected getQueueName(queueName: string): string {
+    if (isEmpty(queueName)) {
       throw new InvalidAwsSQSQueueNameError();
     }
+
+    return queueName;
   }
 }
