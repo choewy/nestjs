@@ -1,0 +1,39 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+
+env:
+  compose-file: ./aws-docker/docker-compose.yml
+
+jobs:
+  test:
+    name: Run Test
+    runs-on: ubuntu-22.04
+
+    strategy:
+      matrix:
+        node-version: ['16.x']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Docker Compose
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: ${{ compose-file }}
+
+      - name: Testing
+        run: npm run test
