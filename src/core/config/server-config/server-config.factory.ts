@@ -6,29 +6,30 @@ import { ConfigToken } from '../enums';
 import { InvalidServerHostError, InvalidServerPortError } from './server-config.error';
 
 export class ServerConfigFactory {
-  constructor(private readonly processEnv: NodeJS.ProcessEnv = process.env) {}
-
   public static of() {
     return registerAs(ConfigToken.SERVER, () => new ServerConfigFactory());
   }
 
-  get host(): string {
-    const val = this.processEnv.SERVER_HOST;
+  readonly host: string;
+  readonly port: number;
 
-    if (isEmpty(val)) {
-      throw new InvalidServerHostError();
-    }
+  constructor(processEnv: NodeJS.ProcessEnv = process.env) {
+    this.host = processEnv.SERVER_HOST;
+    this.port = Number(processEnv.SERVER_PORT);
 
-    return val;
+    this.validateHost();
+    this.validatePort();
   }
 
-  get port(): number {
-    const val = Number(this.processEnv.SERVER_PORT);
+  private validateHost(): void {
+    if (isEmpty(this.host)) {
+      throw new InvalidServerHostError();
+    }
+  }
 
-    if (isEmpty(val) || !isInt(val)) {
+  private validatePort(): void {
+    if (!isInt(this.port)) {
       throw new InvalidServerPortError();
     }
-
-    return val;
   }
 }
