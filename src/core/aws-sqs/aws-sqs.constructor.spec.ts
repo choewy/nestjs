@@ -11,13 +11,7 @@ class AwsSQSTestConstructor extends AwsSQSConstructor {
 }
 
 describe('AwsSQSConstructor', () => {
-  const awsSQSConstructor = new AwsSQSTestConstructor(
-    'jest',
-    'region',
-    { accessKeyId: 'access', secretAccessKey: 'secret' },
-    'https://jestjs.io',
-    'test-queue',
-  );
+  const awsSQSConstructor = new AwsSQSTestConstructor('jest', 'https://jestjs.io', 'test-queue');
 
   it('contextName을 조회하면 jest:test-queue가 반환되어야 한다.', () => {
     expect(awsSQSConstructor.testContextName()).toEqual('jest:test-queue');

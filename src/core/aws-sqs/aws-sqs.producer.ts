@@ -15,10 +15,10 @@ export class AwsSQSProducer extends AwsSQSConstructor {
 
   private readonly producer: SQS;
 
-  constructor(region: string, credentials: AwsSQSCredentials, endPoint: string, queueName: string) {
-    super(AwsSQSProducer.name, region, credentials, endPoint, queueName);
+  constructor(region: string, credentials: AwsSQSCredentials, endpoint: string, queueName: string) {
+    super(AwsSQSProducer.name, endpoint, queueName);
 
-    this.producer = new SQS({ region, credentials, endpoint: this.endPoint });
+    this.producer = new SQS({ region, credentials, endpoint: endpoint });
   }
 
   async send(subject: string, data: object): Promise<void> {

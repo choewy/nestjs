@@ -24,16 +24,16 @@ export class AwsSQSConsumer extends AwsSQSConstructor {
   constructor(
     region: string,
     credentials: AwsSQSCredentials,
-    endPoint: string,
+    endpoint: string,
     queueName: string,
     private readonly eventEmitter: EventEmitter2,
   ) {
-    super(AwsSQSConsumer.name, region, credentials, endPoint, queueName);
+    super(AwsSQSConsumer.name, endpoint, queueName);
 
     this.consumer = Consumer.create({
       region,
       queueUrl: this.queueUrl,
-      sqs: new SQS({ region, credentials, endpoint: this.endPoint }),
+      sqs: new SQS({ region, credentials, endpoint }),
       handleMessage: this.handleMessage.bind(this),
       waitTimeSeconds: 0,
     });

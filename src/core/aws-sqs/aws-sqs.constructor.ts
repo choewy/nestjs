@@ -1,22 +1,12 @@
 import { Logger } from '@nestjs/common';
-import { AwsSQSCredentials } from './aws-sqs.dtos';
 
 export class AwsSQSConstructor {
   protected logger = new Logger();
+  protected contextName: string;
+  protected queueUrl: string;
 
-  constructor(
-    private context: string,
-    protected region: string,
-    protected credentials: AwsSQSCredentials,
-    protected readonly endPoint: string,
-    protected readonly queueName: string,
-  ) {}
-
-  protected get contextName(): string {
-    return [this.context, this.queueName].join(':');
-  }
-
-  protected get queueUrl(): string {
-    return [this.endPoint, this.queueName].join('/');
+  constructor(context: string, endpoint: string, queueName: string) {
+    this.contextName = [context, queueName].join(':');
+    this.queueUrl = [endpoint, queueName].join('/');
   }
 }
