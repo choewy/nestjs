@@ -1,3 +1,5 @@
+export * from './interfaces';
+
 export * from './aws-sqs.dtos';
 
 export * from './aws-sqs.producer';

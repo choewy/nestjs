@@ -1,8 +1,10 @@
 import { registerAs } from '@nestjs/config';
 import { ConfigToken } from '../enums';
+
+import { AwsSQSConfigFactoryProperty } from './enums';
 import { AwsSQSConfig } from './aws-sqs-config';
 
-export class AwsSQSConfigFactory {
+export class AwsSQSConfigFactory implements Record<AwsSQSConfigFactoryProperty, AwsSQSConfig> {
   public static of() {
     return registerAs(ConfigToken.AWS_SQS, () => new AwsSQSConfigFactory());
   }
