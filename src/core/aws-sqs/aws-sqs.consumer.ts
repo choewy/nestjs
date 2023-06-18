@@ -3,10 +3,10 @@ import { Message, SQS } from '@aws-sdk/client-sqs';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
 import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
+import { AwsSQSConstructor } from './aws-sqs.constructor';
 import { AwsConfigFactory } from '../config';
-import { Logger } from '@nestjs/common';
 
-export class AwsSQSConsumer {
+export class AwsSQSConsumer extends AwsSQSConstructor {
   public static of(
     awsConfigFactory: AwsConfigFactory,
     endPoint: string,
@@ -19,16 +19,17 @@ export class AwsSQSConsumer {
     return new AwsSQSConsumer(region, credentials, endPoint, queueName, eventEmitter);
   }
 
-  private readonly logger = new Logger();
   private readonly consumer: Consumer;
 
   constructor(
     region: string,
     credentials: AwsSQSCredentials,
-    private readonly endPoint: string,
-    private readonly queueName: string,
+    endPoint: string,
+    queueName: string,
     private readonly eventEmitter: EventEmitter2,
   ) {
+    super(AwsSQSConsumer.name, region, credentials, endPoint, queueName);
+
     this.consumer = Consumer.create({
       region,
       queueUrl: this.queueUrl,
@@ -46,14 +47,6 @@ export class AwsSQSConsumer {
     if (this.consumer) {
       this.consumer.stop();
     }
-  }
-
-  private get contextName(): string {
-    return [AwsSQSConsumer.name, this.queueName].join(':');
-  }
-
-  private get queueUrl(): string {
-    return [this.endPoint, this.queueName].join('/');
   }
 
   private async handleMessage(message: Message): Promise<void> {

@@ -1,11 +1,11 @@
 import { v4 } from 'uuid';
 import { SQS } from '@aws-sdk/client-sqs';
-import { Logger } from '@nestjs/common';
 
 import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
+import { AwsSQSConstructor } from './aws-sqs.constructor';
 import { AwsConfigFactory } from '../config';
 
-export class AwsSQSProducer {
+export class AwsSQSProducer extends AwsSQSConstructor {
   public static of(awsConfigFactory: AwsConfigFactory, endPoint: string, queueName: string) {
     const region = awsConfigFactory.region;
     const credentials = AwsSQSCredentials.of(awsConfigFactory);
@@ -13,23 +13,12 @@ export class AwsSQSProducer {
     return new AwsSQSProducer(region, credentials, endPoint, queueName);
   }
 
-  private readonly logger = new Logger();
   private readonly producer: SQS;
 
-  constructor(
-    region: string,
-    credentials: AwsSQSCredentials,
-    private readonly endPoint: string,
-    private readonly queueName: string,
-  ) {
-    this.producer = new SQS({ region, credentials, endpoint: this.endPoint });
-  }
-  private get contextName(): string {
-    return [AwsSQSProducer.name, this.queueName].join(':');
-  }
+  constructor(region: string, credentials: AwsSQSCredentials, endPoint: string, queueName: string) {
+    super(AwsSQSProducer.name, region, credentials, endPoint, queueName);
 
-  private get queueUrl(): string {
-    return [this.endPoint, this.queueName].join('/');
+    this.producer = new SQS({ region, credentials, endpoint: this.endPoint });
   }
 
   async send(subject: string, data: object): Promise<void> {
