@@ -6,14 +6,22 @@ import { ConfigToken } from '../enums';
 import { InvalidAwsAccessKeyIdError, InvalidAwsRegionError, InvalidAwsSecretAccessKeyError } from './aws-config.error';
 
 export class AwsConfigFactory {
-  constructor(private readonly processEnv: NodeJS.ProcessEnv = process.env) {}
-
   public static of() {
     return registerAs(ConfigToken.AWS, () => new AwsConfigFactory());
   }
 
-  get region(): string {
-    const val = this.processEnv.AWS_REGION;
+  readonly region: string;
+  readonly accessKeyId: string;
+  readonly secretAccessKey: string;
+
+  constructor(processEnv: NodeJS.ProcessEnv = process.env) {
+    this.region = this.getRegion(processEnv);
+    this.accessKeyId = this.getAccessKeyId(processEnv);
+    this.secretAccessKey = this.getSecretAccessKey(processEnv);
+  }
+
+  protected getRegion(processEnv: NodeJS.ProcessEnv): string {
+    const val = processEnv.AWS_REGION;
 
     if (isEmpty(val)) {
       throw new InvalidAwsRegionError();
@@ -22,8 +30,8 @@ export class AwsConfigFactory {
     return val;
   }
 
-  get accessKeyId(): string {
-    const val = this.processEnv.AWS_ACCESS_KEY_ID;
+  protected getAccessKeyId(processEnv: NodeJS.ProcessEnv): string {
+    const val = processEnv.AWS_ACCESS_KEY_ID;
 
     if (isEmpty(val)) {
       throw new InvalidAwsAccessKeyIdError();
@@ -32,8 +40,8 @@ export class AwsConfigFactory {
     return val;
   }
 
-  get secretAccessKey(): string {
-    const val = this.processEnv.AWS_SECRET_ACCESS_KEY;
+  protected getSecretAccessKey(processEnv: NodeJS.ProcessEnv): string {
+    const val = processEnv.AWS_SECRET_ACCESS_KEY;
 
     if (isEmpty(val)) {
       throw new InvalidAwsSecretAccessKeyError();
