@@ -78,7 +78,9 @@
       "<rootDir>/src/"
     ],
     "moduleNameMapper": {
-      "^@/(|/.*)$": "<rootDir>/src/$1"
+      "^@/(|/.*)$": "<rootDir>/src/$1",
+      "^@/core": "<rootDir>/src/core",
+      "^@/module": "<rootDir>/src/module"
     }
   }
 }
