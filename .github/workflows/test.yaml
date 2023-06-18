@@ -6,9 +6,6 @@ on:
     branches:
       - master
 
-env:
-  compose-file: ./aws-docker/docker-compose.yml
-
 jobs:
   test:
     name: Run Test
@@ -33,7 +30,7 @@ jobs:
       - name: Run Docker Compose
         uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: ${{ compose-file }}
+          compose-file: ./aws-docker/docker-compose.yml
 
       - name: Testing
         run: npm run test
