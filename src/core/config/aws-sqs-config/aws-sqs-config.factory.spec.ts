@@ -1,4 +1,4 @@
-import { AwsSQSconfigFactory } from './aws-sqs-config.factory';
+import { AwsSQSConfigFactory } from './aws-sqs-config.factory';
 
 import {
   InvalidAwsSQSEndPointError,
@@ -9,31 +9,31 @@ import {
 describe('AwsSQSConfigFactory', () => {
   describe('Throw Error Case', () => {
     it('환경변수에 AWS_SQS_END_POINT가 없으면 InvalidAwsSQSEndPointError를 던진다.', () => {
-      expect(() => new AwsSQSconfigFactory({}).endPoint).toThrowError(InvalidAwsSQSEndPointError);
+      expect(() => new AwsSQSConfigFactory({}).endPoint).toThrowError(InvalidAwsSQSEndPointError);
     });
 
     it('환경변수에 AWS_SQS_USER_QUEUE_NAME이 없으면 InvalidAwsSQSUserQueueNameError를 던진다.', () => {
-      expect(() => new AwsSQSconfigFactory({}).userQueueName).toThrowError(InvalidAwsSQSUserQueueNameError);
+      expect(() => new AwsSQSConfigFactory({}).userQueueName).toThrowError(InvalidAwsSQSUserQueueNameError);
     });
 
     it('환경변수에 AWS_SQS_SYSTEM_QUEUE_NAME이 없으면 InvalidAwsSQSSystemQueueNameError를 던진다.', () => {
-      expect(() => new AwsSQSconfigFactory({}).systemQueueName).toThrowError(InvalidAwsSQSSystemQueueNameError);
+      expect(() => new AwsSQSConfigFactory({}).systemQueueName).toThrowError(InvalidAwsSQSSystemQueueNameError);
     });
   });
 
   describe('Return Value Case', () => {
     it('환경변수에 AWS_SQS_END_POINT가 있으면 값을 반환한다.', () => {
-      expect(new AwsSQSconfigFactory({ AWS_SQS_END_POINT: 'end-point' }).endPoint).toEqual('end-point');
+      expect(new AwsSQSConfigFactory({ AWS_SQS_END_POINT: 'end-point' }).endPoint).toEqual('end-point');
     });
 
     it('환경변수에 AWS_SQS_USER_QUEUE_NAME이 있으면 값을 반환한다.', () => {
-      expect(new AwsSQSconfigFactory({ AWS_SQS_USER_QUEUE_NAME: 'user-queue.fifo' }).userQueueName).toEqual(
+      expect(new AwsSQSConfigFactory({ AWS_SQS_USER_QUEUE_NAME: 'user-queue.fifo' }).userQueueName).toEqual(
         'user-queue.fifo',
       );
     });
 
     it('환경변수에 AWS_SQS_SYSTEM_QUEUE_NAME이 있으면 값을 반환한다.', () => {
-      expect(new AwsSQSconfigFactory({ AWS_SQS_SYSTEM_QUEUE_NAME: 'system-queue.fifo' }).systemQueueName).toEqual(
+      expect(new AwsSQSConfigFactory({ AWS_SQS_SYSTEM_QUEUE_NAME: 'system-queue.fifo' }).systemQueueName).toEqual(
         'system-queue.fifo',
       );
     });
