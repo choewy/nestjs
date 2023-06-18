@@ -26,7 +26,12 @@ export class AwsSQSConsumer extends AwsSQSConstructor {
     super(AwsSQSConsumer.name, awsSQSConfig);
 
     this.consumer = super.createConsumer(region, credentials, this.handleMessage.bind(this));
-    this.consumer.start();
+
+    setInterval(() => {
+      if (!this.consumer.isRunning) {
+        this.consumer.start();
+      }
+    }, 1000);
   }
 
   public close(): void {
