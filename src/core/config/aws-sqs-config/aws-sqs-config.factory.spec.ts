@@ -1,41 +1,50 @@
 import { AwsSQSConfigFactory } from './aws-sqs-config.factory';
 
-import {
-  InvalidAwsSQSEndPointError,
-  InvalidAwsSQSSystemQueueNameError,
-  InvalidAwsSQSUserQueueNameError,
-} from './aws-sqs.config.error';
+import { InvalidAwsSQSEndPointError, InvalidAwsSQSQueueNameError } from './aws-sqs-config.error';
+import { AwsSQSConfig } from './aws-sqs-config';
+
+const AWS_SQS_END_POINT = 'endpoint';
+const AWS_SQS_USER_QUEUE_NAME = 'user-queue';
+const AWS_SQS_SYSTEM_QUEUE_NAME = 'system-queue';
 
 describe('AwsSQSConfigFactory', () => {
   describe('Throw Error Case', () => {
     it('환경변수에 AWS_SQS_END_POINT가 없으면 InvalidAwsSQSEndPointError를 던진다.', () => {
-      expect(() => new AwsSQSConfigFactory({}).endPoint).toThrowError(InvalidAwsSQSEndPointError);
+      const processEnv = { AWS_SQS_USER_QUEUE_NAME, AWS_SQS_SYSTEM_QUEUE_NAME };
+
+      expect(() => new AwsSQSConfigFactory(processEnv)).toThrowError(InvalidAwsSQSEndPointError);
     });
 
-    it('환경변수에 AWS_SQS_USER_QUEUE_NAME이 없으면 InvalidAwsSQSUserQueueNameError를 던진다.', () => {
-      expect(() => new AwsSQSConfigFactory({}).userQueueName).toThrowError(InvalidAwsSQSUserQueueNameError);
+    it('환경변수에 AWS_SQS_USER_QUEUE_NAME이 없으면 InvalidAwsSQSQueueNameError를 던진다.', () => {
+      const processEnv = { AWS_SQS_END_POINT, AWS_SQS_SYSTEM_QUEUE_NAME };
+
+      expect(() => new AwsSQSConfigFactory(processEnv)).toThrowError(InvalidAwsSQSQueueNameError);
     });
 
     it('환경변수에 AWS_SQS_SYSTEM_QUEUE_NAME이 없으면 InvalidAwsSQSSystemQueueNameError를 던진다.', () => {
-      expect(() => new AwsSQSConfigFactory({}).systemQueueName).toThrowError(InvalidAwsSQSSystemQueueNameError);
+      const processEnv = { AWS_SQS_END_POINT, AWS_SQS_USER_QUEUE_NAME };
+
+      expect(() => new AwsSQSConfigFactory(processEnv)).toThrowError(InvalidAwsSQSQueueNameError);
     });
   });
 
   describe('Return Value Case', () => {
-    it('환경변수에 AWS_SQS_END_POINT가 있으면 값을 반환한다.', () => {
-      expect(new AwsSQSConfigFactory({ AWS_SQS_END_POINT: 'end-point' }).endPoint).toEqual('end-point');
+    const awsSQSConfigFactory = new AwsSQSConfigFactory({
+      AWS_SQS_END_POINT,
+      AWS_SQS_SYSTEM_QUEUE_NAME,
+      AWS_SQS_USER_QUEUE_NAME,
     });
 
-    it('환경변수에 AWS_SQS_USER_QUEUE_NAME이 있으면 값을 반환한다.', () => {
-      expect(new AwsSQSConfigFactory({ AWS_SQS_USER_QUEUE_NAME: 'user-queue.fifo' }).userQueueName).toEqual(
-        'user-queue.fifo',
-      );
+    it('환경변수에 AWS_SQS_* 값이 모두 있으면 AwsSQSConfigFactory 인스턴스를 생성한다.', () => {
+      expect(awsSQSConfigFactory).toBeInstanceOf(AwsSQSConfigFactory);
     });
 
-    it('환경변수에 AWS_SQS_SYSTEM_QUEUE_NAME이 있으면 값을 반환한다.', () => {
-      expect(new AwsSQSConfigFactory({ AWS_SQS_SYSTEM_QUEUE_NAME: 'system-queue.fifo' }).systemQueueName).toEqual(
-        'system-queue.fifo',
-      );
+    it('userQueue는 AwsSQSConfig 인스턴스로 생성되어야 한다.', () => {
+      expect(awsSQSConfigFactory.userQueue).toBeInstanceOf(AwsSQSConfig);
+    });
+
+    it('systemQueue는 AwsSQSConfig 인스턴스로 생성되어야 한다.', () => {
+      expect(awsSQSConfigFactory.systemQueue).toBeInstanceOf(AwsSQSConfig);
     });
   });
 });
