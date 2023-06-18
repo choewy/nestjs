@@ -14,22 +14,27 @@ export class ServerConfigFactory {
   readonly port: number;
 
   constructor(processEnv: NodeJS.ProcessEnv = process.env) {
-    this.host = processEnv.SERVER_HOST;
-    this.port = Number(processEnv.SERVER_PORT);
-
-    this.validateHost();
-    this.validatePort();
+    this.host = this.getHost(processEnv);
+    this.port = this.getPort(processEnv);
   }
 
-  private validateHost(): void {
-    if (isEmpty(this.host)) {
+  protected getHost(processEnv: NodeJS.ProcessEnv): string {
+    const val = processEnv.SERVER_HOST;
+
+    if (isEmpty(val)) {
       throw new InvalidServerHostError();
     }
+
+    return val;
   }
 
-  private validatePort(): void {
-    if (!isInt(this.port)) {
+  protected getPort(processEnv: NodeJS.ProcessEnv): number {
+    const val = Number(processEnv.SERVER_PORT);
+
+    if (!isInt(val)) {
       throw new InvalidServerPortError();
     }
+
+    return val;
   }
 }
