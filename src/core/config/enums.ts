@@ -9,4 +9,5 @@ export enum ConfigToken {
   SERVER = 'server',
   AWS = 'aws',
   AWS_SQS = 'aws-sqs',
+  MYSQL = 'mysql',
 }
