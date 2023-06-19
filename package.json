@@ -85,7 +85,8 @@
     "moduleNameMapper": {
       "^@/(|/.*)$": "<rootDir>/src/$1",
       "^@/core": "<rootDir>/src/core",
-      "^@/module": "<rootDir>/src/module"
+      "^@/module": "<rootDir>/src/module",
+      "^@/logging": "<rootDir>/src/logging"
     }
   }
 }
