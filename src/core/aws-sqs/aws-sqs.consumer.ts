@@ -44,7 +44,7 @@ export class AwsSQSConsumer extends AwsSQSConstructor {
   }
 
   public close(): void {
-    if (this.consumer) {
+    if (this.consumer && this.consumer.isRunning) {
       this.consumer.stop();
     }
   }
