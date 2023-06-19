@@ -5,14 +5,13 @@ services:
     build: ./localstack
     container_name: nestjs-aws-sqs-localstack
     environment:
-      - SERVICES=sqs
       - DATA_DIR=/tmp/localstack/data
       - AWS_DEFAULT_REGION=ap-southeast-2
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
+      - SERVICES=sqs,s3
       - DEBUG=1
     ports:
-      - 45661:4566
+      - 4566:4566
+      - 4572:4572
     volumes:
       - ./localstack/.data:/tmp/localstack/data
 

@@ -36,7 +36,6 @@ export class AwsSQSConstructor {
     const consumer = Consumer.create({
       region,
       handleMessage,
-      waitTimeSeconds: 0,
       queueUrl: this.queueUrl,
       sqs: this.createSQSClient(region, credentials),
     });
