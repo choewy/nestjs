@@ -25,7 +25,7 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
     volumes:
       - ./mysql/.data:/var/lib/mysql
       - ./mysql/.dump:/disk
