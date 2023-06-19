@@ -11,7 +11,7 @@ export class SystemController {
 
   @Post()
   async sendToUser() {
-    return this.systemSQSProducer.userQueue.send(SystemSQSProducerSubject.WELCOME_TO_USER, {
+    return this.systemSQSProducer.sendToUser(SystemSQSProducerSubject.WELCOME_TO_USER, {
       username: 'choewy',
       message: 'welcome, choewy.',
       createdAt: new Date(),
