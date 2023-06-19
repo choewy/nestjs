@@ -24,7 +24,16 @@ class AwsSQSTestConstructor extends AwsSQSConstructor {
 }
 
 describe('AwsSQSConstructor', () => {
-  const awsSQSConstructor = new AwsSQSTestConstructor('jest', AwsSQSConfig.of('https://jestjs.io', 'test-queue'));
+  const awsSQSConstructor = new AwsSQSTestConstructor('jest', AwsSQSConfig.of('https://jestjs.io', 'test-queue'), {
+    pending: () => Promise.resolve(),
+    sendOk: () => Promise.resolve(),
+    sendFail: () => Promise.resolve(),
+    consumeOk: () => Promise.resolve(),
+    consumeFail: () => Promise.resolve(),
+    processingOk: () => Promise.resolve(),
+    processingFail: () => Promise.resolve(),
+  });
+
   const awsConfigFActory = new AwsConfigFactory({
     AWS_REGION: 'region',
     AWS_ACCESS_KEY_ID: 'access',

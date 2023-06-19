@@ -5,37 +5,52 @@ import { AwsConfigFactory, AwsSQSConfig } from '../config';
 
 import { AwsSQSConstructor } from './aws-sqs.constructor';
 import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
+import { AwsSQSLogServiceImpl } from './interfaces';
 
 export class AwsSQSProducer extends AwsSQSConstructor {
-  public static of(awsConfigFactory: AwsConfigFactory, awsSQSConfig: AwsSQSConfig) {
+  public static of(
+    producerName: string,
+    awsConfigFactory: AwsConfigFactory,
+    awsSQSConfig: AwsSQSConfig,
+    awsSQSLogService: AwsSQSLogServiceImpl,
+  ) {
     const region = awsConfigFactory.region;
     const credentials = AwsSQSCredentials.of(awsConfigFactory);
 
-    return new AwsSQSProducer(region, credentials, awsSQSConfig);
+    return new AwsSQSProducer(producerName, region, credentials, awsSQSConfig, awsSQSLogService);
   }
 
   private readonly producer: SQS;
 
-  constructor(region: string, credentials: AwsSQSCredentials, awsSQSConfig: AwsSQSConfig) {
-    super(AwsSQSProducer.name, awsSQSConfig);
+  constructor(
+    private readonly producerName: string,
+    region: string,
+    credentials: AwsSQSCredentials,
+    awsSQSConfig: AwsSQSConfig,
+    awsSQSLogService: AwsSQSLogServiceImpl,
+  ) {
+    super(AwsSQSProducer.name, awsSQSConfig, awsSQSLogService);
 
     this.producer = this.createProducer(region, credentials);
   }
 
   async send(subject: string, data: object): Promise<void> {
-    try {
-      const id = v4();
+    const uuid = v4();
 
+    await this.awsSQSLogService.pending(uuid, this.producerName, subject, data);
+
+    try {
+      const body = AwsSQSMessageBody.to(subject, data);
       const response = await this.producer.sendMessage({
         QueueUrl: this.queueUrl,
-        MessageGroupId: id,
-        MessageDeduplicationId: id,
-        MessageBody: JSON.stringify(AwsSQSMessageBody.to(subject, data)),
+        MessageGroupId: uuid,
+        MessageDeduplicationId: uuid,
+        MessageBody: JSON.stringify(body),
       });
 
-      this.logger.debug(JSON.stringify({ messageId: response.MessageId }, null, 2), this.contextName);
+      await this.awsSQSLogService.sendOk(uuid, response.MessageId);
     } catch (e) {
-      this.logger.error(JSON.stringify({ error: e }, null, 2), e.stack, this.contextName);
+      await this.awsSQSLogService.sendFail(uuid, e);
     }
   }
 }

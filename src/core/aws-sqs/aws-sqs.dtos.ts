@@ -28,3 +28,11 @@ export class AwsSQSMessageBody<D = object> {
 
   constructor(readonly subject: string, readonly data: D) {}
 }
+
+export class AwsSQSSendResult {
+  public static of(uuid: string, messageId: string, data: string) {
+    return new AwsSQSSendResult(uuid, messageId, data);
+  }
+
+  constructor(readonly uuid: string, readonly messageId: string, readonly data: string) {}
+}

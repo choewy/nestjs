@@ -6,24 +6,33 @@ import { AwsConfigFactory, AwsSQSConfig } from '../config';
 
 import { AwsSQSConstructor } from './aws-sqs.constructor';
 import { AwsSQSCredentials, AwsSQSMessageBody } from './aws-sqs.dtos';
+import { AwsSQSLogServiceImpl } from './interfaces';
 
 export class AwsSQSConsumer extends AwsSQSConstructor {
-  public static of(awsConfigFactory: AwsConfigFactory, awsSQSConfig: AwsSQSConfig, eventEmitter: EventEmitter2) {
+  public static of(
+    consumerName: string,
+    awsConfigFactory: AwsConfigFactory,
+    awsSQSConfig: AwsSQSConfig,
+    awsSQSLogService: AwsSQSLogServiceImpl,
+    eventEmitter: EventEmitter2,
+  ) {
     const region = awsConfigFactory.region;
     const credentials = AwsSQSCredentials.of(awsConfigFactory);
 
-    return new AwsSQSConsumer(region, credentials, awsSQSConfig, eventEmitter);
+    return new AwsSQSConsumer(consumerName, region, credentials, awsSQSConfig, awsSQSLogService, eventEmitter);
   }
 
   private readonly consumer: Consumer;
 
   constructor(
+    private readonly consumerName: string,
     region: string,
     credentials: AwsSQSCredentials,
     awsSQSConfig: AwsSQSConfig,
+    awsSQSLogService: AwsSQSLogServiceImpl,
     private readonly eventEmitter: EventEmitter2,
   ) {
-    super(AwsSQSConsumer.name, awsSQSConfig);
+    super(AwsSQSConsumer.name, awsSQSConfig, awsSQSLogService);
 
     this.consumer = super.createConsumer(region, credentials, this.handleMessage.bind(this));
 
@@ -42,15 +51,14 @@ export class AwsSQSConsumer extends AwsSQSConstructor {
 
   private async handleMessage(message: Message): Promise<void> {
     const messageId = message.MessageId;
+    await this.awsSQSLogService.consumeOk(messageId, this.consumerName);
 
     try {
       const messageBody = AwsSQSMessageBody.from(message.Body);
-
-      this.logger.verbose(JSON.stringify({ messageId, ...messageBody }, null, 2), this.contextName);
-
-      await this.eventEmitter.emitAsync(messageBody.subject, messageBody.data);
+      await this.eventEmitter.emitAsync(messageBody.subject, messageId, messageBody.data);
+      await this.awsSQSLogService.processingOk(messageId);
     } catch (e) {
-      this.logger.error(JSON.stringify({ messageId, error: e }, null, 2), e.stack, this.contextName);
+      await this.awsSQSLogService.processingFail(messageId, e);
     }
   }
 }

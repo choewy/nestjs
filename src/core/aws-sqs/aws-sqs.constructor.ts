@@ -4,14 +4,18 @@ import { SQS } from '@aws-sdk/client-sqs';
 
 import { AwsSQSConfig } from '../config';
 import { AwsSQSCredentials } from './aws-sqs.dtos';
-import { AwsSQSConsumerMessageHandler } from './interfaces';
+import { AwsSQSConsumerMessageHandler, AwsSQSLogServiceImpl } from './interfaces';
 
 export class AwsSQSConstructor {
   protected readonly logger = new Logger();
   protected readonly contextName: string;
   protected readonly queueUrl: string;
 
-  constructor(private readonly context: string, private readonly awsSQSConfig: AwsSQSConfig) {
+  constructor(
+    private readonly context: string,
+    private readonly awsSQSConfig: AwsSQSConfig,
+    protected readonly awsSQSLogService: AwsSQSLogServiceImpl,
+  ) {
     this.contextName = [this.context, this.awsSQSConfig.queueName].join(':');
     this.queueUrl = [this.awsSQSConfig.endpoint, this.awsSQSConfig.queueName].join('/');
   }
