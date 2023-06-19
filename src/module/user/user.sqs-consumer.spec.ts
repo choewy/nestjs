@@ -1,15 +1,32 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserSQSConsumer } from './user.sqs-consumer';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
-import { CoreModule } from '@/core';
+import { ConfigModule } from '@/core';
+import { SQSLogService } from '@/logging';
+
+import { UserSQSConsumer } from './user.sqs-consumer';
 
 describe('UserSQSConsumer', () => {
   let userSQSConsumer: UserSQSConsumer;
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      imports: [CoreModule],
-      providers: [UserSQSConsumer],
+      imports: [ConfigModule, EventEmitterModule.forRoot()],
+      providers: [
+        UserSQSConsumer,
+        {
+          provide: SQSLogService,
+          useValue: () => ({
+            pending: async () => Promise.resolve(),
+            sendOk: async () => Promise.resolve(),
+            sendFail: async () => Promise.resolve(),
+            consumeOk: async () => Promise.resolve(),
+            consumeFail: async () => Promise.resolve(),
+            processingOk: async () => Promise.resolve(),
+            processingFail: async () => Promise.resolve(),
+          }),
+        },
+      ],
     }).compile();
 
     userSQSConsumer = module.get(UserSQSConsumer);

@@ -11,7 +11,7 @@ export class UserController {
 
   @Post()
   async sendToSystem() {
-    return this.userSQSProducer.systemQueue.send(UserSQSProducerSubject.HELLO_TO_SYSTEM, {
+    return this.userSQSProducer.sendToSystem(UserSQSProducerSubject.HELLO_TO_SYSTEM, {
       username: 'choewy',
       message: 'hello, system.',
       createdAt: new Date(),
