@@ -11,6 +11,10 @@ export class AwsSQSConfig {
   private readonly AWS_SQS_SECRET_ACCESS_KEY = this.configService.get<string>('AWS_SQS_SECRET_ACCESS_KEY');
   private readonly AWS_SQS_ENDPOINT = this.configService.get<string>('AWS_SQS_ENDPOINT');
 
+  public getQueueUrl(queueName: string) {
+    return [this.AWS_SQS_ENDPOINT, queueName].join('/');
+  }
+
   public getCredentials() {
     return {
       accessKeyId: this.AWS_SQS_ACCES_KEY_ID,
@@ -26,10 +30,6 @@ export class AwsSQSConfig {
     };
   }
 
-  public getQueueUrl(queueName: string) {
-    return [this.AWS_SQS_ENDPOINT, queueName].join('/');
-  }
-
   public getConsumerOptions(
     queueName: string,
     options: Pick<ConsumerOptions, 'handleMessage' | 'sqs'>,
@@ -37,6 +37,7 @@ export class AwsSQSConfig {
     return {
       region: this.AWS_SQS_REGION,
       queueUrl: this.getQueueUrl(queueName),
+      waitTimeSeconds: 0,
       ...options,
     };
   }
