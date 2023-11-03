@@ -16,6 +16,6 @@ export class GuestController {
 
   @OnEvent(GuestMessageEvent.Subject, { suppressErrors: false })
   async onMessage(event: GuestMessageEvent) {
-    console.log(event);
+    console.log({ context: GuestController.name, event });
   }
 }
