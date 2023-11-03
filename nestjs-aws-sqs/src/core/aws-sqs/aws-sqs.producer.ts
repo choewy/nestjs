@@ -3,6 +3,7 @@ import { SQS } from '@aws-sdk/client-sqs';
 import { AwsSQSConfig } from '@common/configs';
 import { AwsSQSQueueName } from '@common/enums';
 
+import { AwsSQSMessageBody } from './types';
 import { AwsSQSProduceError } from './errors';
 import { AwsSQSLogService } from './aws-sqs-log.service';
 
@@ -24,17 +25,17 @@ export class AwsSQSProducer extends SQS {
   ): Promise<AwsSQSProduceError | null> {
     let error: AwsSQSProduceError | null;
 
-    const awsSQSLog = await this.awsSQSLogService.init(subject, payload);
+    const awsSQSLog = await this.awsSQSLogService.init(this.producerName, subject, payload);
 
     try {
       const message = await super.sendMessage({
         QueueUrl: this.awsSQSConfig.getQueueUrl(queueName),
         MessageGroupId: awsSQSLog.id,
         MessageDeduplicationId: awsSQSLog.id,
-        MessageBody: JSON.stringify({ subject, payload }),
+        MessageBody: JSON.stringify({ subject, payload } as AwsSQSMessageBody<T>),
       });
 
-      await this.awsSQSLogService.updateAfterProduce(awsSQSLog.id, message.MessageId, this.producerName);
+      await this.awsSQSLogService.updateAfterProduce(awsSQSLog.id, message.MessageId);
     } catch (e) {
       error = new AwsSQSProduceError(e);
 

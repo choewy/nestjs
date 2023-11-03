@@ -14,9 +14,10 @@ export class AwsSQSLogService {
     private readonly awsSQSLogModel: Model<AwsSQSLog>,
   ) {}
 
-  async init<T>(subject: string, payload: T) {
+  async init<T>(producerName: string, subject: string, payload: T) {
     return new this.awsSQSLogModel({
       id: [Date.now(), v4()].join('_'),
+      producerName,
       subject,
       payload,
       status: AwsSQSStatus.Created,
@@ -24,13 +25,12 @@ export class AwsSQSLogService {
     }).save();
   }
 
-  async updateAfterProduce(id: string, messageId: string, producerName: string): Promise<void> {
+  async updateAfterProduce(id: string, messageId: string): Promise<void> {
     await this.awsSQSLogModel
       .updateOne(
         { id },
         {
           messageId,
-          producerName,
           status: AwsSQSStatus.Produced,
           producedAt: new Date(),
         },
