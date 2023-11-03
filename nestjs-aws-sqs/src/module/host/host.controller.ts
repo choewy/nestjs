@@ -16,6 +16,6 @@ export class HostController {
 
   @OnEvent(HostMessageEvent.Subject, { suppressErrors: false })
   async onMessage(event: HostMessageEvent) {
-    console.log(event);
+    console.log({ context: HostController.name, event });
   }
 }
