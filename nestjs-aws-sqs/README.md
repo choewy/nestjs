@@ -26,7 +26,7 @@ npm run start:dev
 ### guest send message to host
 
 ```zsh
-curl -X GET http://localhost:3000/guest/send/hello
+curl -X GET "http://localhost:3000/guest/send/hello"
 ```
 
 ```json
@@ -39,7 +39,7 @@ curl -X GET http://localhost:3000/guest/send/hello
 ### host send message to guest
 
 ```zsh
-curl -X GET http://localhost:3000/host/send/welcome
+curl -X GET "http://localhost:3000/host/send/welcome"
 ```
 
 ```json
@@ -47,4 +47,14 @@ curl -X GET http://localhost:3000/host/send/welcome
   "context": "GuestController",
   "event": { "message": "welcome", "date": "2023-11-03T11:09:53.536Z" }
 }
+```
+
+### get logs
+
+```zsh
+curl -X GET "http://localhost:3000/logs/sqs"
+```
+
+```zsh
+curl -X GET "http://localhost:3000/logs/sqs?skip=10&limit=30"
 ```
