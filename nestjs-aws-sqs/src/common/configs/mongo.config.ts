@@ -9,11 +9,12 @@ export class MongoConfig {
   private readonly MONGO_PORT = this.configService.get<string>('MONGO_PORT');
   private readonly MONGO_USERNAME = this.configService.get<string>('MONGO_USERNAME');
   private readonly MONGO_PASSWORD = this.configService.get<string>('MONGO_PASSWORD');
+  private readonly MONGO_DB_NAME = this.configService.get<string>('MONGO_DB_NAME');
 
-  public getModuleOptions(dbName?: string, connectionName?: string): [string, MongooseModuleOptions] {
+  public getModuleOptions(connectionName?: string): [string, MongooseModuleOptions] {
     return [
       `${this.MONGO_PROTOCOL}://${this.MONGO_USERNAME}:${this.MONGO_PASSWORD}@${this.MONGO_HOST}:${this.MONGO_PORT}`,
-      { dbName, connectionName },
+      { connectionName, dbName: this.MONGO_DB_NAME },
     ];
   }
 }

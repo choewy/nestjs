@@ -3,6 +3,7 @@ export enum MongoDBName {
 }
 
 export enum MongoDBConnectionName {
+  App = 'app',
   Logger = 'logger',
 }
 
