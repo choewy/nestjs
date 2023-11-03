@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  redis:
+    container_name: redis
+    build:
+      context: .
+      dockerfile: dockerfile
+    volumes:
+      - ./data:/data
+    ports:
+      - 6380:6379
+    restart: always

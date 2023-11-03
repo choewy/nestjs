@@ -1,4 +1,4 @@
 /docker/localstack/tmp
-
 /docker/mongo/data
 /docker/mongo/logs
+/docker/redis/data
