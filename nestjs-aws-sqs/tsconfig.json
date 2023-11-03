@@ -19,10 +19,10 @@
     "noFallthroughCasesInSwitch": false,
     "esModuleInterop": true,
     "paths": {
-      "@common": ["src/common/*"],
-      "@core": ["src/core/*"],
-      "@module": ["src/module/*"],
-      "@app": ["src/*"]
+      "@common/*": ["src/common/*"],
+      "@core/*": ["src/core/*"],
+      "@module/*": ["src/module/*"],
+      "@app/*": ["src/*"]
     }
   }
 }
