@@ -1,6 +1,7 @@
 import { SQSClientConfig } from '@aws-sdk/client-sqs';
 
 import { ConfigService } from '@nestjs/config';
+import { ConsumerOptions } from 'sqs-consumer';
 
 export class AwsSQSConfig {
   private readonly configService = new ConfigService();
@@ -11,12 +12,10 @@ export class AwsSQSConfig {
   private readonly AWS_SQS_ENDPOINT = this.configService.get<string>('AWS_SQS_ENDPOINT');
 
   public getCredentials() {
-    if (this.AWS_SQS_ACCES_KEY_ID && this.AWS_SQS_SECRET_ACCESS_KEY) {
-      return {
-        accessKeyId: this.AWS_SQS_ACCES_KEY_ID,
-        secretAccessKey: this.AWS_SQS_SECRET_ACCESS_KEY,
-      };
-    }
+    return {
+      accessKeyId: this.AWS_SQS_ACCES_KEY_ID,
+      secretAccessKey: this.AWS_SQS_SECRET_ACCESS_KEY,
+    };
   }
 
   public getClientOptions(): SQSClientConfig {
@@ -29,5 +28,16 @@ export class AwsSQSConfig {
 
   public getQueueUrl(queueName: string) {
     return [this.AWS_SQS_ENDPOINT, queueName].join('/');
+  }
+
+  public getConsumerOptions(
+    queueName: string,
+    options: Pick<ConsumerOptions, 'handleMessage' | 'sqs'>,
+  ): ConsumerOptions {
+    return {
+      region: this.AWS_SQS_REGION,
+      queueUrl: this.getQueueUrl(queueName),
+      ...options,
+    };
   }
 }
