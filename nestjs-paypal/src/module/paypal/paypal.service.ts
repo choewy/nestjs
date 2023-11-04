@@ -10,6 +10,7 @@ import { lastValueFrom } from 'rxjs';
 import { AxiosHeaders } from 'axios';
 import { FailGetPaypalOrderError } from './errors';
 import { OrderResponseBody } from '@paypal/paypal-js';
+import { ApprovePaypalOrderBody } from 'react-paypal-client/src/common/types';
 
 @Injectable()
 export class PaypalService {
@@ -21,7 +22,11 @@ export class PaypalService {
     private readonly hashService: HashService,
   ) {}
 
-  async getPaypalOrderDetails(orderId: string) {
+  public getPaypalClientIdForInitSDK(): string {
+    return this.config.getPaypalClientId();
+  }
+
+  async getPaypalOrder(orderId: string) {
     const url = this.config.getPaypalApiUrl(`v2/checkout/orders/${orderId}`);
 
     const headers = new AxiosHeaders();
@@ -49,10 +54,13 @@ export class PaypalService {
       body.amount,
     );
 
-    return new CreatePaypalOrderResponseDto(hash, order);
+    return new CreatePaypalOrderResponseDto(this.config.getPaypalClientId(), hash, order);
   }
 
-  async approvePaypalOrder() {
-    return;
+  async approvePaypalOrder(body: ApprovePaypalOrderBody): Promise<void> {
+    const paypalOrder = await this.getPaypalOrder(body.orderId);
+    const orderLogId = this.hashService.stringFromBase64(paypalOrder.purchase_units[0].description);
+
+    await this.paypalOrderLogService.updateStatus(orderLogId, paypalOrder);
   }
 }

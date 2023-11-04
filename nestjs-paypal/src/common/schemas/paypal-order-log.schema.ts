@@ -32,11 +32,8 @@ export class PaypalOrderLog {
   @Prop({ type: SchemaTypes.Date, required: true })
   createdAt: Date;
 
-  @Prop({ type: SchemaTypes.Date, default: null })
-  approvedAt: Date | null;
-
-  @Prop({ type: SchemaTypes.Date, default: null })
-  completedAt: Date | null;
+  @Prop({ type: SchemaTypes.Date, required: true })
+  updatedAt: Date;
 }
 
 export const PaypalOrderLogSchema = SchemaFactory.createForClass(PaypalOrderLog);

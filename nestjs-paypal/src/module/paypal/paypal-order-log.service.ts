@@ -7,6 +7,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { MongoDBConnectionName, PaypalOrderStatus } from '@common/enums';
 import { PaypalOrderLog } from '@common/schemas';
 import { CreatePaypalOrderBodyDto } from './dto';
+import { OrderResponseBody } from '@paypal/paypal-js/types/apis/orders';
 
 @Injectable()
 export class PaypalOrderLogService {
@@ -24,6 +25,19 @@ export class PaypalOrderLogService {
       itemAmount: body.amount,
       orderStatus: PaypalOrderStatus.Created,
       createdAt: new Date(),
+      updatedAt: new Date(),
     }).save();
+  }
+
+  async updateStatus(id: string, order: OrderResponseBody) {
+    await this.paypalOrderModel.updateOne(
+      { id },
+      {
+        orderId: order.id,
+        orderDetails: order,
+        orderStatus: order.status,
+        updatedAt: new Date(),
+      },
+    );
   }
 }
