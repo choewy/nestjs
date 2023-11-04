@@ -1,16 +1,22 @@
+import { lastValueFrom } from 'rxjs';
+import { AxiosHeaders } from 'axios';
+
+import { OrderResponseBody } from '@paypal/paypal-js';
+
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 
 import { PaypalConfig } from '@common/configs';
 import { HashService } from '@core/hash';
 
-import { CreatePaypalOrderBodyDto, CreatePaypalOrderRequestBodyDto, CreatePaypalOrderResponseDto } from './dto';
-import { PaypalOrderLogService } from './paypal-order-log.service';
-import { lastValueFrom } from 'rxjs';
-import { AxiosHeaders } from 'axios';
+import {
+  ApprovePaypalOrderBodyDto,
+  CreatePaypalOrderBodyDto,
+  CreatePaypalOrderRequestBodyDto,
+  CreatePaypalOrderResponseDto,
+} from './dto';
 import { FailGetPaypalOrderError } from './errors';
-import { OrderResponseBody } from '@paypal/paypal-js';
-import { ApprovePaypalOrderBody } from 'react-paypal-client/src/common/types';
+import { PaypalOrderLogService } from './paypal-order-log.service';
 
 @Injectable()
 export class PaypalService {
@@ -57,7 +63,7 @@ export class PaypalService {
     return new CreatePaypalOrderResponseDto(this.config.getPaypalClientId(), hash, order);
   }
 
-  async approvePaypalOrder(body: ApprovePaypalOrderBody): Promise<void> {
+  async approvePaypalOrder(body: ApprovePaypalOrderBodyDto): Promise<void> {
     const paypalOrder = await this.getPaypalOrder(body.orderId);
     const orderLogId = this.hashService.stringFromBase64(paypalOrder.purchase_units[0].description);
 

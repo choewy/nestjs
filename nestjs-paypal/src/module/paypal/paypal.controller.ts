@@ -1,8 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 
-import { CreatePaypalOrderBodyDto, CreatePaypalOrderResponseDto } from './dto';
+import { CreatePaypalOrderBodyDto, CreatePaypalOrderResponseDto, ApprovePaypalOrderBodyDto } from './dto';
 import { PaypalService } from './paypal.service';
-import { ApprovePaypalOrderBody } from 'react-paypal-client/src/common/types';
 
 @Controller('paypal')
 export class PaypalController {
@@ -19,7 +18,7 @@ export class PaypalController {
   }
 
   @Post('approve')
-  async approvePaypalOrder(@Body() body: ApprovePaypalOrderBody): Promise<void> {
+  async approvePaypalOrder(@Body() body: ApprovePaypalOrderBodyDto): Promise<void> {
     return this.paypalService.approvePaypalOrder(body);
   }
 }
