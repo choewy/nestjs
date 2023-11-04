@@ -20,6 +20,13 @@ export class RedisConfig {
         password: this.REDIS_PASSWORD,
         db: Number(this.REDIS_DB),
       },
+      limiter: {
+        max: 2,
+        duration: 1000,
+      },
+      defaultJobOptions: {
+        removeOnComplete: true,
+      },
     };
   }
 }

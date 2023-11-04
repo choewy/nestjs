@@ -31,7 +31,6 @@ export class MessageConsumer {
 
     try {
       await this.eventEmitter.emitAsync(job.data.subject, job.data.data);
-      await job.moveToCompleted();
     } catch (e) {
       await job.moveToFailed(e);
     }
