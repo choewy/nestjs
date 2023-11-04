@@ -1,0 +1,64 @@
+version: '3.8'
+
+name: apps
+
+services:
+  app-proxy:
+    image: nginx
+    container_name: app-proxy
+    depends_on:
+      - app01
+      - app02
+      - app03
+      - app04
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/apps.conf
+    ports:
+      - 3000:80
+    networks:
+      - localhost
+
+  app01:
+    container_name: app01
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 30001:3000
+    networks:
+      - localhost
+
+  app02:
+    container_name: app02
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 30002:3000
+    networks:
+      - localhost
+
+  app03:
+    container_name: app03
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 30003:3000
+    networks:
+      - localhost
+
+  app04:
+    container_name: app04
+    build:
+      context: .
+      dockerfile: dockerfile
+    ports:
+      - 30004:3000
+    networks:
+      - localhost
+
+networks:
+  localhost:
+    name: localhost
+    driver: bridge
