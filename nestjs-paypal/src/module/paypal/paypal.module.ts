@@ -8,7 +8,7 @@ import { HashModule } from '@core/hash';
 
 import { PaypalController } from './paypal.controller';
 import { PaypalService } from './paypal.service';
-import { PaypalOrderLogService } from './paypal-order.service';
+import { PaypalOrderLogService } from './paypal-order-log.service';
 
 @Module({
   imports: [

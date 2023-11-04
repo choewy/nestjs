@@ -5,7 +5,7 @@ import { PaypalConfig } from '@common/configs';
 import { HashService } from '@core/hash';
 
 import { CreatePaypalOrderBodyDto, CreatePaypalOrderRequestBodyDto, CreatePaypalOrderResponseDto } from './dto';
-import { PaypalOrderLogService } from './paypal-order.service';
+import { PaypalOrderLogService } from './paypal-order-log.service';
 import { lastValueFrom } from 'rxjs';
 import { AxiosHeaders } from 'axios';
 import { FailGetPaypalOrderError } from './errors';
