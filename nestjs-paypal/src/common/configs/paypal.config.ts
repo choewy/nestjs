@@ -7,8 +7,25 @@ export class PaypalConfig {
   private readonly PAYPAL_CLIENT_ID = this.configService.get<string>('PAYPAL_CLIENT_ID');
   private readonly PAYPAL_CLIENT_SECRET = this.configService.get<string>('PAYPAL_CLIENT_SECRET');
 
-  public getPaypalApiUrl(): string {
-    return this.PAYPAL_API_URL;
+  public getPaypalApiUrl(path?: string): string {
+    let url = this.PAYPAL_API_URL;
+
+    if (path) {
+      if (path.startsWith('/')) {
+        url += path;
+      } else {
+        url += `/${path}`;
+      }
+    }
+
+    return url;
+  }
+
+  public getPaypalBasicAuthorization(): string {
+    return [
+      'Basic',
+      Buffer.from([this.PAYPAL_CLIENT_ID, this.PAYPAL_CLIENT_SECRET].join(':'), 'utf8').toString('base64'),
+    ].join(' ');
   }
 
   public getPaypalClientId(): string {
