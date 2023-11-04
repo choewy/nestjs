@@ -6,11 +6,11 @@ import { CreateOrderForm, PaypalOrderButton } from './components';
 
 export const App: FC = () => {
   const [body, setBody] = useState<CreatePaypalorderBody>({
-    surname: '',
-    givenname: '',
-    email: '',
-    itemname: '',
-    amount: 0,
+    surname: 'choe',
+    givenname: 'wy',
+    email: 'test123@gmail.com',
+    itemname: 'test',
+    amount: 10,
   });
 
   return (

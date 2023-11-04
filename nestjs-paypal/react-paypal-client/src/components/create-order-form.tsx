@@ -22,12 +22,12 @@ export const CreateOrderForm: FC<{
       </div>
 
       <div>
-        <label style={{ display: 'block', fontSize: 13 }}>이메일(USD)</label>
+        <label style={{ display: 'block', fontSize: 13 }}>이메일</label>
         <input name="email" value={body.email} onChange={inputHandler.text} />
       </div>
 
       <div>
-        <label style={{ display: 'block', fontSize: 13 }}>결제상품명(USD)</label>
+        <label style={{ display: 'block', fontSize: 13 }}>결제상품명</label>
         <input name="itemname" value={body.itemname} onChange={inputHandler.text} />
       </div>
 
