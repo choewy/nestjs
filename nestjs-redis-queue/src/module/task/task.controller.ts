@@ -11,11 +11,11 @@ export class TaskController {
 
   @Post('notificate')
   async addTaskNotificateJob(@Body() body: AddTaskNotificateJobBodyDto) {
-    return this.taskService.addTaskJob(new TaskJobDataDto(TaskQueueSubject.Notificate, body));
+    return this.taskService.addNotificateJob(new TaskJobDataDto(TaskQueueSubject.Notificate, body));
   }
 
   @Post('message')
   async addTaskMessageJob(@Body() body: AddTaskMessageJobBodyDto) {
-    return this.taskService.addTaskJob(new TaskJobDataDto(TaskQueueSubject.Message, body));
+    return this.taskService.addMessageJob(new TaskJobDataDto(TaskQueueSubject.Message, body));
   }
 }

@@ -4,6 +4,8 @@ export enum QueueConfigKey {
 
 export enum QueueName {
   Task = 'task',
+  Notificate = 'notificate',
+  Message = 'message',
 }
 
 export enum TaskQueueSubject {

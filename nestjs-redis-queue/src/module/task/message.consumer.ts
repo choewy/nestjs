@@ -8,9 +8,9 @@ import { QueueName } from '@common/enums';
 
 import { AddTaskMessageJobBodyDto, AddTaskNotificateJobBodyDto, TaskJobDataDto } from './dto';
 
-@Processor({ name: QueueName.Task })
-export class TaskConsumer {
-  private readonly logger = new Logger(TaskConsumer.name);
+@Processor({ name: QueueName.Message })
+export class MessageConsumer {
+  private readonly logger = new Logger(MessageConsumer.name);
 
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
@@ -20,7 +20,7 @@ export class TaskConsumer {
       JSON.stringify(
         {
           message: 'consume',
-          name: QueueName.Task,
+          name: QueueName.Message,
           subject: job.data.subject,
           data: job.data.data,
         },
