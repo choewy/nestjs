@@ -1,26 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { FC } from 'react';
 
-function App() {
+import { NotificateForm, Tab } from './components';
+import { leftStore, rightStore } from './store';
+
+export const App: FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex' }}>
+        <NotificateForm />
+      </div>
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <Tab store={leftStore} />
+        <Tab store={rightStore} />
+      </div>
     </div>
   );
-}
-
-export default App;
+};
