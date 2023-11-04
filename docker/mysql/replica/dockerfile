@@ -2,6 +2,6 @@ FROM mysql:8.0
 
 EXPOSE 3306
 
-COPY init.sql docker-entrypoint-initdb.d/init.sql
+COPY init-db.sql docker-entrypoint-initdb.d/init-db.sql
 
-CMD ["mysqld", "--server-id=2", "--bind-address=0.0.0.0", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--log_bin=/var/log/mysql/mysql-bin.log", "--expire_logs_days=90"]
+CMD ["mysqld", "--server-id=2", "--bind-address=0.0.0.0", "--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci", "--log_bin=/var/log/mysql/mysql-bin.log"]
