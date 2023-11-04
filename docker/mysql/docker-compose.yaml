@@ -1,0 +1,45 @@
+version: '3.8'
+
+name: local
+
+services:
+  mysql-master:
+    container_name: mysql-master
+    build:
+      context: master
+      dockerfile: dockerfile
+    ports:
+      - 33061:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    volumes:
+      - ./master/logs:/var/log/mysql
+      - ./master/data:/var/lib/mysql
+      - ./master/disk:/disk
+    restart: always
+    networks:
+      - localhost
+
+  mysql-replica:
+    container_name: mysql-replica
+    build:
+      context: replica
+      dockerfile: dockerfile
+    depends_on:
+      - mysql-master
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: true
+    ports:
+      - 33062:3306
+    volumes:
+      - ./replica/logs:/var/log/mysql
+      - ./replica/data:/var/lib/mysql
+      - ./replica/disk:/disk
+    restart: always
+    networks:
+      - localhost
+
+networks:
+  localhost:
+    name: localhost
+    driver: bridge

@@ -2,8 +2,9 @@
 
 cd docker
 
-cd localstack && docker-compose up --build -d && cd ..
+cd mysql && docker-compose up --build -d && cd ..
 cd mongo && docker-compose up --build -d && cd ..
 cd redis && docker-compose up --build -d && cd ..
+cd localstack && docker-compose up --build -d && cd ..
 
 exit 0

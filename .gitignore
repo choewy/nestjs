@@ -2,3 +2,6 @@
 /docker/mongo/data
 /docker/mongo/logs
 /docker/redis/data
+/docker/mysql/**/data
+/docker/mysql/**/disk
+/docker/mysql/**/logs
