@@ -11,12 +11,6 @@ export class HeroKilledDragonEventHandler
   constructor(private repository: HeroesRepository) {}
 
   handle(event: HeroKilledDragonEvent) {
-    console.log(
-      JSON.stringify(
-        { name: HeroKilledDragonEventHandler.name, event },
-        null,
-        2,
-      ),
-    );
+    console.log({ name: HeroKilledDragonEventHandler.name, event });
   }
 }

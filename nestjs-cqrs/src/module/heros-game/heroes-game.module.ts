@@ -1,22 +1,24 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { HeroesGameSagas } from 'src/module/heros-game/sagas';
-
 import { HeroesGameController } from './heroes-game.controller';
 import { HeroesGameService } from './heroes-game.service';
 import { HeroesRepository } from './heroes.repository';
+import { ItemRepository } from './item.repository';
+import { InventoryRepository } from './inventory.repository';
+import { HeroesGameSagas } from './sagas';
 import {
   KillDragonCommandHandler,
   HeroKilledDragonEventHandler,
   DropAncientItemCommandHandler,
   HeroFoundItemEventHandler,
+  GetInventoryCommandHandler,
 } from './handlers';
-import { ItemRepository } from './item.repository';
 
 export const CommandHandlers = [
   KillDragonCommandHandler,
   DropAncientItemCommandHandler,
+  GetInventoryCommandHandler,
 ];
 
 export const EventHandlers = [
@@ -32,6 +34,7 @@ export const EventHandlers = [
     HeroesGameSagas,
     HeroesRepository,
     ItemRepository,
+    InventoryRepository,
     ...CommandHandlers,
     ...EventHandlers,
   ],

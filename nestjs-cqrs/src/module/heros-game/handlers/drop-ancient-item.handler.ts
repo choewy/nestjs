@@ -8,8 +8,8 @@ export class DropAncientItemCommandHandler
   implements ICommandHandler<DropAncientItemCommand>
 {
   constructor(
-    private readonly repository: ItemRepository,
     private readonly publisher: EventPublisher,
+    private readonly repository: ItemRepository,
   ) {}
 
   async execute(command: DropAncientItemCommand) {

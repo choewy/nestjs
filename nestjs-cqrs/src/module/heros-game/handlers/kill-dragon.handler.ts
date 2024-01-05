@@ -1,6 +1,7 @@
+import { HttpException } from '@nestjs/common';
 import { CommandHandler, EventPublisher, ICommandHandler } from '@nestjs/cqrs';
 
-import { KillDragonCommand } from 'src/module/heros-game/commands';
+import { KillDragonCommand } from '../commands';
 
 import { HeroesRepository } from '../heroes.repository';
 
@@ -16,13 +17,15 @@ export class KillDragonCommandHandler
   async execute(command: KillDragonCommand) {
     const { heroId, dragonId } = command;
 
-    const hero = this.publisher.mergeObjectContext(
-      await this.repository.findOneById(heroId),
-    );
+    const hero = await this.repository.findOneById(heroId);
 
-    console.log({ name: KillDragonCommandHandler.name, command, hero });
+    if (hero == null) {
+      throw new HttpException('not found hero', 404);
+    }
 
-    hero.killEnemy(dragonId);
-    hero.commit();
+    const heroModel = this.publisher.mergeObjectContext(hero);
+
+    heroModel.killEnemy(dragonId);
+    heroModel.commit();
   }
 }
