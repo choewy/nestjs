@@ -8,7 +8,6 @@ import {
 
 import { AggregateRoot } from '@nestjs/cqrs';
 
-import { HeroFoundItemEvent } from 'src/module/heros-game/events';
 import { Inventory } from './inventory.entity';
 
 @Entity()
@@ -22,13 +21,4 @@ export class Item extends AggregateRoot {
   @OneToMany(() => Inventory, (e) => e.item, { cascade: true })
   @JoinTable()
   inventories: Inventory[];
-
-  constructor(id: number) {
-    super();
-    this.id = id;
-  }
-
-  dropped(heroId: number) {
-    this.apply(new HeroFoundItemEvent(this.id, heroId));
-  }
 }
