@@ -1,4 +1,10 @@
-import { DataSource, EntityManager, In, Repository } from 'typeorm';
+import {
+  DataSource,
+  EntityManager,
+  In,
+  InsertResult,
+  Repository,
+} from 'typeorm';
 
 import { Item } from 'src/entities';
 
@@ -21,5 +27,9 @@ export class ItemQuery {
     return this.repository.find({
       where: { id: In([0].concat(ids)) },
     });
+  }
+
+  async upsert(item: Item): Promise<InsertResult> {
+    return this.repository.upsert(item, { conflictPaths: { id: true } });
   }
 }

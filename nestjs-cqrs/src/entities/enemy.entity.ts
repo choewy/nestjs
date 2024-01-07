@@ -19,10 +19,10 @@ export class Enemy extends AggregateRoot {
   exp: number;
 
   @Column({ type: 'int', unsigned: true, default: 0 })
-  deathCount: number;
+  killedCount: number;
 
   killed() {
-    this.deathCount += 1;
+    this.killedCount += 1;
 
     return this;
   }

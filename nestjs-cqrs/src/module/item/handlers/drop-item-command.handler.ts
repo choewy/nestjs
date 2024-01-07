@@ -2,8 +2,9 @@ import { DataSource } from 'typeorm';
 
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
+import { InventoryQuery, ItemQuery } from 'src/query';
+
 import { DropItemCommand } from '../commands';
-import { InventoryQuery } from 'src/query';
 
 @CommandHandler(DropItemCommand)
 export class DropItemCommandHandler
@@ -21,5 +22,8 @@ export class DropItemCommandHandler
     );
 
     await inventoryQuery.upsertOne(inventory.getItem());
+
+    const itemQuery = new ItemQuery(this.dataSource);
+    await itemQuery.upsert(event.item.dropped());
   }
 }
