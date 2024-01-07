@@ -1,3 +1,3 @@
-export class DropAncientItemCommand {
+export class HeroGetInventoryCommand {
   constructor(public readonly heroId: number) {}
 }

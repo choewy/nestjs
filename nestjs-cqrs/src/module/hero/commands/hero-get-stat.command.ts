@@ -1,3 +1,3 @@
-export class GetInventoryCommand {
+export class HeroGetStatCommand {
   constructor(public readonly heroId: number) {}
 }

@@ -1,3 +1,3 @@
 export class KillDragonDto {
-  dragonId: string;
+  dragonId: number;
 }
