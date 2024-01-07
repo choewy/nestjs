@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 
 import { HeroService } from './hero.service';
-import { KillDragonDto } from './dto';
+import { HeroKillDragonDto } from './dto';
 
 @Controller('hero')
 export class HeroController {
@@ -20,7 +20,7 @@ export class HeroController {
   @Post(':heroId(\\d+)')
   async killDragon(
     @Param('heroId') heroId: number,
-    @Body() body: KillDragonDto,
+    @Body() body: HeroKillDragonDto,
   ) {
     await this.heroService.killDragon(+heroId, body);
   }

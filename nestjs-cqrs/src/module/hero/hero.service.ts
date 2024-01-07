@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 
-import { KillDragonDto } from './dto';
+import { HeroKillDragonDto } from './dto';
 import {
   HeroGetInventoryCommand,
   HeroGetStatCommand,
@@ -20,7 +20,7 @@ export class HeroService {
     return this.commandBus.execute(new HeroGetInventoryCommand(heroId));
   }
 
-  async killDragon(heroId: number, dto: KillDragonDto) {
+  async killDragon(heroId: number, dto: HeroKillDragonDto) {
     return this.commandBus.execute(
       new HeroKillDragonCommand(heroId, dto.dragonId),
     );
