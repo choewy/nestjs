@@ -1,1 +1,1 @@
-export * from './drop-item.command';
+export * from './item-dropped.command';

@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
 import { ItemSagas } from './item.sagas';
-import { DropItemCommandHandler } from './handlers';
+import { ItemDroppedCommandHandler } from './handlers';
 
 @Module({
-  providers: [ItemSagas, DropItemCommandHandler],
+  providers: [ItemSagas, ItemDroppedCommandHandler],
 })
 export class ItemModule {}

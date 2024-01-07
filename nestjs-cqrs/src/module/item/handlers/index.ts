@@ -1,1 +1,1 @@
-export * from './drop-item-command.handler';
+export * from './item-dropped-command.handler';
