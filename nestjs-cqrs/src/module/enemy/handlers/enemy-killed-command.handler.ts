@@ -1,8 +1,9 @@
 import { DataSource } from 'typeorm';
 
+import { HttpException } from '@nestjs/common';
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { EnemyQuery } from 'src/query';
+import { EnemyQuery, HeroQuery } from 'src/query';
 
 import { EnemyKilledCommand } from '../commands';
 
@@ -12,10 +13,19 @@ export class EnemyKilledCommandHandler
 {
   constructor(private readonly dataSource: DataSource) {}
 
-  async execute(event: EnemyKilledCommand) {
-    console.log({ name: EnemyKilledCommandHandler.name, event });
+  async execute(command: EnemyKilledCommand) {
+    console.log({ name: EnemyKilledCommandHandler.name, command });
 
     const enemyQuery = new EnemyQuery(this.dataSource);
-    await enemyQuery.upsert(event.enemy.killed());
+    const enemy = await enemyQuery.findOneById(command.enemyId);
+
+    if (enemy == null) {
+      throw new HttpException('not found enemy', 404);
+    }
+
+    await enemyQuery.upsert(enemy.killed());
+
+    const heroQuery = new HeroQuery(this.dataSource);
+    await heroQuery.upsert(command.hero.setExp(enemy.exp));
   }
 }

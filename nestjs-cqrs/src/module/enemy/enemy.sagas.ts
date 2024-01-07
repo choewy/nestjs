@@ -12,7 +12,7 @@ export class EnemySagas {
   dragonKilled(events: Observable<any>): Observable<ICommand> {
     return events.pipe(
       ofType(HeroKillDragonEvent),
-      map((event) => new EnemyKilledCommand(event.dragon)),
+      map((event) => new EnemyKilledCommand(event.hero, event.enemyId)),
     );
   }
 }

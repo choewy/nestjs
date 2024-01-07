@@ -1,5 +1,5 @@
-import { Enemy } from 'src/entities';
+import { Hero } from 'src/entities';
 
 export class EnemyKilledCommand {
-  constructor(public readonly enemy: Enemy) {}
+  constructor(public readonly hero: Hero, public readonly enemyId: number) {}
 }
