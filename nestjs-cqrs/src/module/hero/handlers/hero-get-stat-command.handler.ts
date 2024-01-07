@@ -15,6 +15,8 @@ export class HeroGetStatCommandHandler
   constructor(private readonly dataSource: DataSource) {}
 
   async execute(command: HeroGetStatCommand): Promise<any> {
+    console.log({ name: HeroGetStatCommandHandler.name, command });
+
     const heroQuery = new HeroQuery(this.dataSource);
     const hero = await heroQuery.findOneById(command.heroId);
 

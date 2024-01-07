@@ -14,10 +14,10 @@ export class HeroGetInventoryCommandHandler
   constructor(private readonly dataSource: DataSource) {}
 
   async execute(command: HeroGetInventoryCommand): Promise<any> {
+    console.log({ name: HeroGetInventoryCommandHandler.name, command });
+
     const inventoryQuery = new InventoryQuery(this.dataSource);
     const inventories = await inventoryQuery.findManyByHero(command.heroId);
-
-    console.log(inventories);
 
     const itemQuery = new ItemQuery(this.dataSource);
     const items = await itemQuery.findManyInId(

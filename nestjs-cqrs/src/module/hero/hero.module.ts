@@ -7,7 +7,6 @@ import {
   HeroGetStatCommandHandler,
   HeroGetInventoryCommandHandler,
   HeroKillDragonCommandHandler,
-  HeroKillDragonEventHandler,
 } from './handlers';
 
 export const CommandHandlers = [
@@ -16,10 +15,13 @@ export const CommandHandlers = [
   HeroKillDragonCommandHandler,
 ];
 
-export const EventHandlers = [HeroKillDragonEventHandler];
-
 @Module({
   controllers: [HeroController],
-  providers: [HeroService, ...CommandHandlers, ...EventHandlers],
+  providers: [
+    HeroService,
+    HeroGetStatCommandHandler,
+    HeroGetInventoryCommandHandler,
+    HeroKillDragonCommandHandler,
+  ],
 })
 export class HeroModule {}

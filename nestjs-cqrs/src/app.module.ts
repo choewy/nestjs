@@ -10,6 +10,7 @@ import { InitializeModule } from './module/initialize';
 import { EnemyModule } from './module/enemy';
 import { HeroModule } from './module/hero';
 import { ItemModule } from './module/item';
+import { InventoryModule } from './module/inventory';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ItemModule } from './module/item';
     EnemyModule,
     ItemModule,
     HeroModule,
+    InventoryModule,
   ],
 })
 export class AppModule {}
