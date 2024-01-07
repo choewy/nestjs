@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 
 import { EnemySagas } from './enemy.sagas';
-import { EnemyKilledEventHandler } from './handlers';
+import { EnemyKilledCommandHandler } from './handlers';
 
 @Module({
-  providers: [EnemySagas, EnemyKilledEventHandler],
+  providers: [EnemySagas, EnemyKilledCommandHandler],
 })
 export class EnemyModule {}

@@ -1,1 +1,1 @@
-export * from './enemy-killed-event.handler';
+export * from './enemy-killed-command.handler';
