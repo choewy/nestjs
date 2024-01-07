@@ -13,6 +13,8 @@ export class EnemyKilledEventHandler
   constructor(private readonly dataSource: DataSource) {}
 
   async handle(event: EnemyKilledEvent) {
+    console.log({ name: EnemyKilledEventHandler.name, event });
+
     const enemyQuery = new EnemyQuery(this.dataSource);
     await enemyQuery.upsert(event.enemy.killed());
   }
